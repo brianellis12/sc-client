@@ -7,9 +7,6 @@
         android:label="capstone"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
-        <!-- TODO: Add your Google Maps API key here -->
-        <meta-data android:name="com.google.android.geo.API_KEY"
-               android:value="AIzaSyAhWoOOYG3Njo3hjf3r5aSs1MBu6n34eS0"/>
 
         <activity
             android:name=".MainActivity"
