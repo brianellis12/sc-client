@@ -2,6 +2,10 @@ import 'package:capstone/Location%20Data/location_data.dart';
 import 'package:flutter/material.dart';
 import 'data_service.dart';
 
+/*
+* List of Expansion Panel Widgets
+* Dynamically Rendered from inputted data
+*/
 class DataContainer extends StatefulWidget {
   const DataContainer({super.key});
 
@@ -10,6 +14,7 @@ class DataContainer extends StatefulWidget {
 }
 
 class _DataContainerState extends State<DataContainer> {
+  // Temporary Hardcoded data to be replaced with data from the API
   final List<LocationData> _data = [
     LocationData(values: [
       'Population: 14,328',

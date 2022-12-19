@@ -4,6 +4,10 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:positioned_tap_detector_2/positioned_tap_detector_2.dart';
 
+/*
+* Map Screen
+* Contains Map and A list of imported Data Containers 
+*/
 class MapScreen extends StatefulWidget {
   static const String route = '/tap';
 
@@ -32,6 +36,7 @@ class MapScreenState extends State<MapScreen> {
         padding: const EdgeInsets.all(10),
         children: [
           SizedBox(
+            // Map View
             height: 700,
             child: FlutterMap(
               options: MapOptions(
@@ -49,29 +54,16 @@ class MapScreenState extends State<MapScreen> {
               ],
             ),
           ),
-          const DataContainer()
+          const DataContainer() //Imported list of data containers
         ],
       ),
     );
   }
 
+  // Set marker on user click/tap
   void _handleTap(TapPosition tapPosition, LatLng latlng) {
     setState(() {
       marker = latlng;
     });
   }
 }
-
-//Container(
-          //     color: Colors.white,
-          //     height: 60,
-          //     child: Center(
-          //         child: Column(
-          //       mainAxisAlignment: MainAxisAlignment.center,
-          //       children: [
-          //         Text(
-          //           '(${latLng?.latitude.toStringAsPrecision(4)},${latLng?.longitude.toStringAsPrecision(4)})',
-          //           textAlign: TextAlign.center,
-          //         ),
-          //       ],
-          //     ))),

@@ -1,6 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
 part 'location_data.g.dart';
 
+/*
+* Location data model
+*/
 @JsonSerializable()
 class LocationData {
   String headerValue;
@@ -13,6 +16,7 @@ class LocationData {
     this.isExpanded = false,
   });
 
+  // Methods for converting to and from Json data
   factory LocationData.fromJson(Map<String, dynamic> data) =>
       _$LocationDataFromJson(data);
 

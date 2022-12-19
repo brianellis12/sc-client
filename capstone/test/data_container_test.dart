@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+/*
+* Widget test for Data Containers
+* Assoc: Location Data/data_container.dart
+*/
 void main() {
-  testWidgets('ExpansionPanelList test', (WidgetTester tester) async {
+  testWidgets('Data Containers test', (WidgetTester tester) async {
     late int capturedIndex;
     late bool capturedIsExpanded;
 
