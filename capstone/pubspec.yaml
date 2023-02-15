@@ -39,6 +39,7 @@ dependencies:
   json_annotation: ^4.7.0
   dio: ^5.0.0
   flutter_riverpod: ^2.2.0
+  enum_to_string: ^2.0.1
 
 dev_dependencies:
   flutter_test:

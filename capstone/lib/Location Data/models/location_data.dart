@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:json_annotation/json_annotation.dart';
 part 'location_data.g.dart';
 
@@ -23,37 +25,63 @@ class LocationData {
   Map<String, dynamic> toJson() => _$LocationDataToJson(this);
 }
 
-// enum GroupNames {
-//     @JsonValue('B01')
-//     Sex
-//     SEX_AGE = 'B01'
-//     RACE = 'B02'
-//     ANCESTRY_LATINO = 'B03'
-//     ANCESTRY_NONLATINO = 'B04'
-//     PLACEOFBIRTH_NONUS = 'B05'
-//     PLACEOFBIRTH_US = 'B06'
-//     GEOGRAPHIC_MOBILITY = 'B07'
-//     TRANSPORTATION = 'B08'
-//     CHILDREN_SENIORS = 'B09'
-//     GRANDPARENTS_GRANDCHILDREN = 'B10'
-//     HOUSEHOLD = 'B11'
-//     MARITAL_STATUS = 'B12'
-//     BIRTHS = 'B13'
-//     EDUCATION_ENROLLMENT = 'B14'
-//     EDUCATION_ATTAINMENT = 'B15'
-//     LANGUAGES = 'B16'
-//     INCOME = 'B17'
-//     DISABILITIES = 'B18'
-//     INCOME_BY_HOUSEHOLD = 'B19'
-//     INCOME_BY_SEX = 'B20'
-//     VETERAN_STATUS = 'B21'
-//     FOOD_STAMP_UTILIZATION = 'B22'
-//     EMPLOYMENT_STATUS = 'B23' 
-//     OCCUPATIONS = 'B24'
-//     HOUSING_STANDARD = 'B25'
-//     HOUSING_GROUP_QUARTERS = 'B26'
-//     HEALTH_INSURANCE = 'B27'
-//     HOUSEHOLD_TECHNOLOGY = 'B28'
-//     VOTING_AGE = 'B29'
-
-// } 
+enum GroupNames {
+  @JsonValue('B01')
+  Sex_and_Age,
+  @JsonValue('B02')
+  Race,
+  @JsonValue('B03')
+  Latino_Ancestry,
+  @JsonValue('B04')
+  Non_Latino_Ancestry,
+  @JsonValue('B05')
+  Non_US_Place_of_Birth,
+  @JsonValue('B06')
+  Place_of_Birth_within_US,
+  @JsonValue('B07')
+  Geographic_Mobility,
+  @JsonValue('B08')
+  Transportation,
+  @JsonValue('B09')
+  Children_and_Seniors,
+  @JsonValue('B10')
+  Households_Grandparents_and_Grandchildren,
+  @JsonValue('B11')
+  Households,
+  @JsonValue('B12')
+  Marital_Status,
+  @JsonValue('B13')
+  Births,
+  @JsonValue('B14')
+  Education_Enrollment,
+  @JsonValue('B15')
+  Education_Attainment,
+  @JsonValue('B16')
+  Languages,
+  @JsonValue('B17')
+  Income,
+  @JsonValue('B18')
+  Disabilities,
+  @JsonValue('B19')
+  Income_By_Household,
+  @JsonValue('B20')
+  Income_By_Sex,
+  @JsonValue('B21')
+  Veteran_Status,
+  @JsonValue('B22')
+  Food_Stamp_Utilization,
+  @JsonValue('B23')
+  Employment_Status,
+  @JsonValue('B24')
+  Occupations,
+  @JsonValue('B25')
+  Housing_Status,
+  @JsonValue('B26')
+  Housing_Status_in_Group_Quarters,
+  @JsonValue('B27')
+  Health_Insurance_Status,
+  @JsonValue('B28')
+  Household_Technology,
+  @JsonValue('B29')
+  Basic_Demographics_by_Voting_Age
+}

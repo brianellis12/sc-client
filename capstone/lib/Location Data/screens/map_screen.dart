@@ -1,5 +1,4 @@
 import 'package:capstone/Location Data/models/geographic_types.dart';
-import 'package:capstone/Location%20Data/widgets/data_container.dart';
 import 'package:capstone/Location%20Data/widgets/group_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -44,7 +43,8 @@ class MapScreenState extends ConsumerState<MapScreen> {
               options: MapOptions(
                   center: LatLng(44.967243, -103.771556),
                   zoom: 5,
-                  onTap: _handleTap),
+                  onTap: _handleTap,
+                  enableScrollWheel: false),
               children: [
                 TileLayer(
                   urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
