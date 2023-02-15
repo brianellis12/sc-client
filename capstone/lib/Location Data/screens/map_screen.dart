@@ -41,7 +41,7 @@ class MapScreenState extends ConsumerState<MapScreen> {
             height: 700,
             child: FlutterMap(
               options: MapOptions(
-                  center: LatLng(45.5231, -122.6765),
+                  center: LatLng(44.967243, -103.771556),
                   zoom: 5,
                   onTap: _handleTap),
               children: [
