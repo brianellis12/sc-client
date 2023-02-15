@@ -16,16 +16,16 @@ class DataContainer extends StatefulWidget {
 class _DataContainerState extends State<DataContainer> {
   // Temporary Hardcoded data to be replaced with data from the API
   final List<LocationData> _data = [
-    LocationData(values: [
-      'Population: 14,328',
-      'Percentage of the population under the age of 5: 3%',
-      'Percentage of the population between the ages of 20 and 40: 36%',
-      'Median age: 41',
-      'Average Household size: 5.2'
-    ], headerValue: 'Population Statistics'),
-    LocationData(
-        values: ['Average Household Income: 32,052'],
-        headerValue: 'Income Data'),
+    // LocationData(values: [
+    //   'Population: 14,328',
+    //   'Percentage of the population under the age of 5: 3%',
+    //   'Percentage of the population between the ages of 20 and 40: 36%',
+    //   'Median age: 41',
+    //   'Average Household size: 5.2'
+    // ], headerValue: 'Population Statistics'),
+    // LocationData(
+    //     values: ['Average Household Income: 32,052'],
+    //     headerValue: 'Income Data'),
     LocationData(
         values: ['Percentage that moved in the past 5 years: 12%'],
         headerValue: 'Geographic Mobility Statistics')

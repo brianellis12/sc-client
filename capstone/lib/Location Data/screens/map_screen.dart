@@ -1,5 +1,6 @@
 import 'package:capstone/Location Data/models/geographic_types.dart';
 import 'package:capstone/Location%20Data/widgets/data_container.dart';
+import 'package:capstone/Location%20Data/widgets/group_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -38,7 +39,7 @@ class MapScreenState extends ConsumerState<MapScreen> {
         children: [
           SizedBox(
             // Map View
-            height: 700,
+            height: 600,
             child: FlutterMap(
               options: MapOptions(
                   center: LatLng(44.967243, -103.771556),
@@ -55,7 +56,9 @@ class MapScreenState extends ConsumerState<MapScreen> {
               ],
             ),
           ),
-          const DataContainer() //Imported list of data containers
+          const SizedBox(
+              height: 2000,
+              child: GroupBar()) //Imported list of data containers
         ],
       ),
     );
