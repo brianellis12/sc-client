@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
-import 'Location Data/map_screen.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'Location Data/screens/map_screen.dart';
 
-void main() => runApp(const DataMapsApp());
+void main() {
+  runApp(const ProviderScope(child: DataMapsApp()));
+}
 
-class DataMapsApp extends StatelessWidget {
+class DataMapsApp extends ConsumerWidget {
   const DataMapsApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return const MaterialApp(title: 'Data Maps', home: MapScreen());
   }
 }

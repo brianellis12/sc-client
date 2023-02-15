@@ -1,5 +1,5 @@
-import 'package:capstone/Location%20Data/data_container.dart';
-import 'package:capstone/Location%20Data/map_screen.dart';
+import 'package:capstone/Location%20Data/widgets/data_container.dart';
+import 'package:capstone/Location%20Data/screens/map_screen.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_test/flutter_test.dart';
 

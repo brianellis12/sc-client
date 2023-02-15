@@ -1,6 +1,6 @@
-import 'package:capstone/Location%20Data/location_data.dart';
+import 'package:capstone/Location%20Data/models/location_data.dart';
 import 'package:flutter/material.dart';
-import 'data_service.dart';
+import '../services/data_service.dart';
 
 /*
 * List of Expansion Panel Widgets
