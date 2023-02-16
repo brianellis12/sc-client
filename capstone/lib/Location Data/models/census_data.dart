@@ -2,6 +2,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'census_data.g.dart';
 
+/*
+* Model for the census data/statistics obtained from the Rest API
+*/
 @JsonSerializable()
 class CensusData {
   List<String>? currentCensusData;
@@ -19,6 +22,9 @@ class CensusData {
   Map<String, dynamic> toJson() => _$CensusDataToJson(this);
 }
 
+/*
+* Holds the state of the Census data
+*/
 class CensusDataNotifier extends StateNotifier<CensusData> {
   CensusDataNotifier(CensusData initialState) : super(initialState);
 

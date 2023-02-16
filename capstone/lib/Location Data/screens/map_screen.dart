@@ -58,13 +58,13 @@ class _MapScreenState extends ConsumerState<MapScreen> {
           ),
           const SizedBox(
               height: 40000,
-              child: GroupBar()) //Imported list of data containers
+              child: GroupBar()) //Imported group bar containing data containers
         ],
       ),
     );
   }
 
-  // Set marker on user click/tap
+  // Set marker on user click/tap and send coordinates to the Rest API
   Future<void> _handleTap(TapPosition tapPosition, LatLng latlng) async {
     setState(() {
       marker = latlng;

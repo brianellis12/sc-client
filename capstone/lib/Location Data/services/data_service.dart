@@ -7,13 +7,15 @@ import '../models/location_data.dart';
 import 'package:dio/dio.dart';
 
 /*
-* Framework for Data Service to be implemented in Sprint 3
-* Sends coordinates to API, Receives data from API
+* Location Data Service
+* Sends and Receives data from the Rest API
 */
-
-class LocationDataService {
+class associated {
   final dio = Dio();
 
+  /*
+  * Get the geographic data from the inputted coordinates
+  */
   Future<GeographicTypes> getGeoId(double longitude, double latitude) async {
     final params = {'longitude': longitude, 'latitude': latitude};
 
@@ -26,6 +28,9 @@ class LocationDataService {
     return result;
   }
 
+  /*
+  * Get the sections associated with the inputted group in the database
+  */
   Future<Sections> getSections(String group) async {
     final params = {'group': group.toString()};
     print(group);
@@ -39,6 +44,9 @@ class LocationDataService {
     return Sections()..currentSections = List<String>.from(response.data);
   }
 
+  /*
+  * Get the census data from the Census Bureau API for the inputted section and location
+  */
   Future<CensusData> getCensusData(
       String stateCode, String county, String tract, String section) async {
     final params = {
@@ -58,6 +66,9 @@ class LocationDataService {
   }
 }
 
+/*
+* Provider for accessing the Location Data Service
+*/
 final locationDataServiceProvider = Provider((ref) {
-  return LocationDataService();
+  return associated();
 });

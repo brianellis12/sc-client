@@ -2,6 +2,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'sections.g.dart';
 
+/*
+* Model for the sections of each Census data group
+*/
 @JsonSerializable()
 class Sections {
   List<String>? currentSections;
@@ -19,6 +22,9 @@ class Sections {
   Map<String, dynamic> toJson() => _$SectionsToJson(this);
 }
 
+/*
+* Holds the state of the user's current sections
+*/
 class SectionsNotifier extends StateNotifier<Sections> {
   SectionsNotifier(Sections initialState) : super(initialState);
 

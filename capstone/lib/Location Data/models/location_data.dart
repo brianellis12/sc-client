@@ -18,6 +18,9 @@ class LocationData {
   });
 }
 
+/*
+* Holds the state of the Location data for use with the Data Container functionality
+*/
 class LocationDataNotifier extends StateNotifier<LocationData> {
   LocationDataNotifier(LocationData initialState) : super(initialState);
 
@@ -32,6 +35,9 @@ final locationDataProvider =
   return LocationDataNotifier(initialState);
 });
 
+/*
+* The group names to be used for the Group Bar Widget
+*/
 enum GroupNames {
   Sex_and_Age,
   Race,

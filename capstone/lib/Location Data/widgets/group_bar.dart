@@ -7,6 +7,9 @@ import 'package:enum_to_string/enum_to_string.dart';
 import 'package:capstone/Location Data/models/location_data.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+/*
+* Holds a collection of dabs with the data containers, one for each census data group
+*/
 class GroupBar extends ConsumerStatefulWidget {
   const GroupBar({Key? key}) : super(key: key);
 
@@ -21,6 +24,7 @@ class _GroupBarState extends ConsumerState<GroupBar> {
 
   final List<Tab> myTabs = enums.map((String name) => Tab(text: name)).toList();
 
+  // Get and set the sections for the group selected
   Future<void> setSections(GroupNames group) async {
     final locationDataService = ref.watch(locationDataServiceProvider);
     final Sections sections = await locationDataService.getSections(group.code);
@@ -29,6 +33,7 @@ class _GroupBarState extends ConsumerState<GroupBar> {
         .specifyCurrentSections(sections.currentSections);
   }
 
+  // Build the Tab Bar
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -52,7 +57,7 @@ class _GroupBarState extends ConsumerState<GroupBar> {
           ),
           body: TabBarView(
             children: enums.map((String name) {
-              return const MyStatefulWidget();
+              return const DataContainer();
             }).toList(),
           ),
         );
