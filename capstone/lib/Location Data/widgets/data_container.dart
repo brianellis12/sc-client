@@ -6,6 +6,84 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/data_service.dart';
 
+class MyStatefulWidget extends ConsumerStatefulWidget {
+  const MyStatefulWidget({super.key});
+
+  @override
+  ConsumerState createState() => _MyStatefulWidgetState();
+}
+
+class _MyStatefulWidgetState extends ConsumerState<MyStatefulWidget> {
+  late List<String> headers;
+  late List<String> values;
+  late List<LocationData> _data;
+
+  @override
+  Widget build(BuildContext context) {
+    headers = ref.watch(sectionsProvider).currentSections ?? [];
+    values = ref.watch(censusDataProvider).currentCensusData ?? [];
+
+    _data = headers.map((header) {
+      return LocationData(
+          headerValue: header, values: values, id: headers.indexOf(header));
+    }).toList();
+
+    // _data.forEach((element) {
+    //   final locationData = ref.watch(locationDataProvider);
+    //   bool isExpanded = locationData.isExpanded;
+    //   String header = locationData.headerValue;
+
+    //   if (isExpanded) {
+    //     getCensusData(header);
+    //   }
+    // });
+
+    return SingleChildScrollView(
+      child: Container(
+        child: _buildPanel(),
+      ),
+    );
+  }
+
+  void getCensusData(String section) async {
+    final stateCode = ref.watch(geographicTypesProvider).stateCode;
+    final county = ref.watch(geographicTypesProvider).county;
+    final tract = ref.watch(geographicTypesProvider).tract;
+
+    final locationDataService = ref.watch(locationDataServiceProvider);
+    final CensusData censusData = await locationDataService.getCensusData(
+        stateCode!, county!, tract!, section);
+
+    ref
+        .read(censusDataProvider.notifier)
+        .specifyCurrentCensusData(censusData.currentCensusData);
+  }
+
+  Widget _buildPanel() {
+    return ExpansionPanelList.radio(
+      initialOpenPanelValue: 2,
+      children: _data.map<ExpansionPanelRadio>((LocationData item) {
+        return ExpansionPanelRadio(
+          value: item.id,
+          headerBuilder: (BuildContext context, bool isExpanded) {
+            if (isExpanded == true) {
+              getCensusData(item.headerValue);
+            }
+            return ListTile(
+              title: Text(item.headerValue),
+            );
+          },
+          body: Column(children: [
+            ...values.map((item) => ListTile(
+                  title: Text(item),
+                ))
+          ]),
+        );
+      }).toList(),
+    );
+  }
+}
+
 /*
 * List of Expansion Panel Widgets
 * Dynamically Rendered from inputted data

@@ -52,7 +52,7 @@ class _GroupBarState extends ConsumerState<GroupBar> {
           ),
           body: TabBarView(
             children: enums.map((String name) {
-              return const DataContainer();
+              return const MyStatefulWidget();
             }).toList(),
           ),
         );

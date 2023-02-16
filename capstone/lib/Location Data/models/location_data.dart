@@ -2,14 +2,16 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /*
-* Location data model
+* Location data model for use with the content of the Data Containers
 */
 class LocationData {
+  int id;
   String headerValue;
   List<String> values;
   bool isExpanded;
 
   LocationData({
+    this.id = 0,
     this.values = const [''],
     this.headerValue = '',
     this.isExpanded = false,

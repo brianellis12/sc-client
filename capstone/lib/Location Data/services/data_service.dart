@@ -21,7 +21,7 @@ class LocationDataService {
         params.entries.map((e) => '${e.key}=${e.value}').join('&');
 
     final response = await dio.get('http://localhost:8000/geoid?$queryParams');
-
+    print(response.data);
     final result = GeographicTypes.fromJson(response.data);
     return result;
   }
