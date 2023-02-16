@@ -17,10 +17,10 @@ class MapScreen extends ConsumerStatefulWidget {
   const MapScreen({Key? key}) : super(key: key);
 
   @override
-  ConsumerState createState() => MapScreenState();
+  ConsumerState createState() => _MapScreenState();
 }
 
-class MapScreenState extends ConsumerState<MapScreen> {
+class _MapScreenState extends ConsumerState<MapScreen> {
   LatLng marker = LatLng(10, 10);
 
   @override
@@ -57,7 +57,7 @@ class MapScreenState extends ConsumerState<MapScreen> {
             ),
           ),
           const SizedBox(
-              height: 2000,
+              height: 40000,
               child: GroupBar()) //Imported list of data containers
         ],
       ),

@@ -1,43 +1,62 @@
+import 'package:capstone/Location%20Data/models/census_data.dart';
+import 'package:capstone/Location%20Data/models/geographic_types.dart';
 import 'package:capstone/Location%20Data/models/location_data.dart';
+import 'package:capstone/Location%20Data/models/sections.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/data_service.dart';
 
 /*
 * List of Expansion Panel Widgets
 * Dynamically Rendered from inputted data
 */
-class DataContainer extends StatefulWidget {
-  const DataContainer({super.key});
+class DataContainer extends ConsumerStatefulWidget {
+  const DataContainer({Key? key}) : super(key: key);
 
   @override
-  State<DataContainer> createState() => _DataContainerState();
+  ConsumerState createState() => _DataContainerState();
 }
 
-class _DataContainerState extends State<DataContainer> {
+class _DataContainerState extends ConsumerState<DataContainer> {
   // Temporary Hardcoded data to be replaced with data from the API
-  final List<LocationData> _data = [
-    // LocationData(values: [
-    //   'Population: 14,328',
-    //   'Percentage of the population under the age of 5: 3%',
-    //   'Percentage of the population between the ages of 20 and 40: 36%',
-    //   'Median age: 41',
-    //   'Average Household size: 5.2'
-    // ], headerValue: 'Population Statistics'),
-    // LocationData(
-    //     values: ['Average Household Income: 32,052'],
-    //     headerValue: 'Income Data'),
-    LocationData(
-        values: ['Percentage that moved in the past 5 years: 12%'],
-        headerValue: 'Geographic Mobility Statistics')
-  ];
+  late List<String> headers;
+  late List<String> values;
+  late List<LocationData> _data;
 
   @override
   Widget build(BuildContext context) {
+    headers = ref.watch(sectionsProvider).currentSections ?? [];
+    values = ref.watch(censusDataProvider).currentCensusData ?? [];
+    _data = headers.map((header) => LocationData(headerValue: header)).toList();
+    _data.forEach((element) {
+      final locationData = ref.watch(locationDataProvider);
+      bool isExpanded = locationData.isExpanded;
+      String header = locationData.headerValue;
+
+      if (isExpanded) {
+        setData(header);
+      }
+    });
+
     return SingleChildScrollView(
       child: Container(
         child: _buildPanel(),
       ),
     );
+  }
+
+  void setData(String section) async {
+    final stateCode = ref.watch(geographicTypesProvider).stateCode;
+    final county = ref.watch(geographicTypesProvider).county;
+    final tract = ref.watch(geographicTypesProvider).tract;
+
+    final locationDataService = ref.watch(locationDataServiceProvider);
+    final CensusData censusData = await locationDataService.getCensusData(
+        stateCode!, county!, tract!, section);
+
+    ref
+        .read(censusDataProvider.notifier)
+        .specifyCurrentCensusData(censusData.currentCensusData);
   }
 
   Widget _buildPanel() {
@@ -48,7 +67,7 @@ class _DataContainerState extends State<DataContainer> {
           });
         },
         children: _data.map<ExpansionPanel>((LocationData item) {
-          final tiles = item.values?.map((element) => ListTile(
+          final tiles = item.values.map((element) => ListTile(
                 title: Text(element),
               ));
           return ExpansionPanel(
@@ -58,7 +77,7 @@ class _DataContainerState extends State<DataContainer> {
               );
             },
             body: Column(children: [
-              ...item.values!.map((item) => ListTile(
+              ...values.map((item) => ListTile(
                     title: Text(item),
                   ))
             ]),
