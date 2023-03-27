@@ -1,7 +1,8 @@
 import 'dart:convert' as convert;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:heart_tree_star/team/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../models/user.dart';
 
 class UserContext {
   bool get loggedIn => user != null && token.isNotEmpty;

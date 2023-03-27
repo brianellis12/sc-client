@@ -15,18 +15,6 @@ class User {
   @JsonKey(name: 'email')
   String email = '';
 
-  @JsonKey(name: 'supervisor_id')
-  int? supervisorId;
-
-  @JsonKey(name: 'mentor_id')
-  int? mentorId;
-
-  @JsonKey(name: 'practice_area')
-  String practiceArea = '';
-
-  @JsonKey(name: 'is_admin')
-  bool? isAdmin = false;
-
   String get fullName => '$firstName $lastName';
 
   String get initials => fullName

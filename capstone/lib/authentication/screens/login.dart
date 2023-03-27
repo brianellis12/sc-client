@@ -1,15 +1,12 @@
 import 'package:beamer/beamer.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:capstone/Location%20Data/screens/map_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:heart_tree_star/authentication/models/authenticate_response.dart';
-import 'package:heart_tree_star/authentication/services/authentication_service.dart';
-import 'package:heart_tree_star/authentication/state/auth_provider.dart';
-import 'package:heart_tree_star/devices/services/devices_service.dart';
-import 'package:heart_tree_star/devices/state/firebase_message_provider.dart';
-import 'package:heart_tree_star/shared/widgets/hts_all_icon.dart';
+import 'package:capstone/authentication/models/authenticate_response.dart';
+import 'package:capstone/authentication/services/authentication_service.dart';
+import 'package:capstone/authentication/state/auth_provider.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -38,28 +35,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       });
   }
 
-  _registerDeviceNotifications() async {
-    final excludedPlatforms = [TargetPlatform.windows, TargetPlatform.linux];
-
-    if (excludedPlatforms.contains(defaultTargetPlatform) || kIsWeb) {
-      return;
-    }
-
-    final messaging = await ref.read(firebaseMessageProvider.future);
-    final settings = await messaging.requestPermission(
-      alert: true,
-      sound: true,
-      badge: true,
-    );
-
-    if (settings.authorizationStatus != AuthorizationStatus.authorized) {
-      return;
-    }
-
-    final deviceService = ref.read(deviceServiceProfiler);
-    await deviceService.registerDevice();
-  }
-
   void authenticate() async {
     setState(() {
       loading = true;
@@ -85,17 +60,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       retryWithName = false;
 
       authContext.logIn(auth.user!, auth.accessToken!);
-      await _registerDeviceNotifications();
       if (!mounted) {
         return;
       }
 
-      context.beamToReplacementNamed('/dashboard', stacked: false);
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => const MapScreen()));
     } catch (err) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Unable to Login $err'),
-          backgroundColor: Theme.of(context).errorColor,
+          backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
     } finally {
@@ -112,7 +87,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const HTSAllIcon(color: Colors.white),
             const SizedBox(width: 10),
             Text(
               'Heart-Tree-Star',
@@ -130,7 +104,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               'By Fresh',
               style: Theme.of(context)
                   .textTheme
-                  .caption!
+                  .bodySmall!
                   .copyWith(color: Colors.white),
             ),
             const FaIcon(FontAwesomeIcons.leaf, color: Colors.white)
@@ -219,11 +193,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage('assets/images/hts-login.jpg'),
-              fit: BoxFit.cover),
-        ),
+        // decoration: const BoxDecoration(
+        //   image: DecorationImage(
+        //       image: AssetImage('assets/googleimage.png'), fit: BoxFit.cover),
+        // ),
         child: Flex(
           direction: Axis.vertical,
           children: [

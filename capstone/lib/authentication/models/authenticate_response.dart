@@ -1,5 +1,6 @@
-import 'package:heart_tree_star/team/models/user.dart';
 import 'package:json_annotation/json_annotation.dart';
+
+import 'user.dart';
 
 part 'authenticate_response.g.dart';
 

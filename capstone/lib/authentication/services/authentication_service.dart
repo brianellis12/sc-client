@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:heart_tree_star/authentication/models/authenticate_request.dart';
-import 'package:heart_tree_star/authentication/models/authenticate_response.dart';
-import 'package:heart_tree_star/configuration/state/api_client.dart';
+import 'package:capstone/authentication/models/authenticate_request.dart';
+import 'package:capstone/authentication/models/authenticate_response.dart';
+import 'package:capstone/configuration/state/api_client.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:heart_tree_star/configuration/state/config_settings.dart';
+import 'package:capstone/configuration/state/config_settings.dart';
 
 class AuthenticationService {
   late Dio api;
