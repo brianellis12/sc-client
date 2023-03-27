@@ -10,13 +10,46 @@ import 'firebase_options.dart';
 /*
 * Run the application
 */
+import 'firebase_options.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(const ProviderScope(child: DataMapsApp()));
+Future _registerDesktopPlugin(ConfigSettings config) async {
+  if (!config.isDesktop) {
+    return;
+  }
+
+  await GoogleSignInDart.register(
+    clientId: config.oauthDesktopClientId,
+  );
 }
 
+void main({List<Override>? testOverrides}) async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final useFirebase =
+      !kIsWeb && defaultTargetPlatform != TargetPlatform.windows;
+  if (useFirebase) {
+    Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  }
+
+  final container = ProviderContainer(overrides: testOverrides ?? []);
+  // eager load some proivders
+  final userContext = container.read(authProvider.notifier);
+  final config = container.read(configSettingsProvider);
+
+  await Future.wait([
+    userContext.initialize(),
+    config.initialize(),
+  ]);
+
+  // now that config has been initialized...
+  await _registerDesktopPlugin(config);
+
+  runApp(
+    UncontrolledProviderScope(
+      container: container,
+      child: const DataMapsApp(),
+    ),
+  );
+}
 class DataMapsApp extends ConsumerWidget {
   const DataMapsApp({super.key});
 
