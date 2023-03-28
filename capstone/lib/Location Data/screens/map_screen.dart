@@ -1,11 +1,15 @@
 import 'package:capstone/Location Data/models/geographic_types.dart';
 import 'package:capstone/Location%20Data/widgets/group_bar.dart';
+import 'package:capstone/authentication/state/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:positioned_tap_detector_2/positioned_tap_detector_2.dart';
 import 'package:capstone/Location Data/services/data_service.dart';
+
+import '../../authentication/models/user.dart';
+import '../../authentication/screens/login.dart';
 
 /*
 * Map Screen
@@ -36,6 +40,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
       body: ListView(
         padding: const EdgeInsets.all(10),
         children: [
+          navbar(),
           SizedBox(
             // Map View
             height: 600,
@@ -61,6 +66,36 @@ class _MapScreenState extends ConsumerState<MapScreen> {
               child: GroupBar()) //Imported group bar containing data containers
         ],
       ),
+    );
+  }
+
+  // Navbar with Account Dropdown
+  Widget navbar() {
+    User? user = ref.watch(authProvider).user;
+    return AppBar(
+      title: const Text('Data Maps'),
+      actions: [
+        PopupMenuButton(
+          icon: Icon(Icons.account_circle),
+          itemBuilder: (context) => [
+            PopupMenuItem(child: Text('${user?.fullName}')),
+            PopupMenuItem(child: Text('Email: ${user?.email}')),
+            PopupMenuItem(
+              child: ElevatedButton(
+                child: const Text('Logout'),
+                onPressed: () {
+                  // Logout and navigate to another screen
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginScreen()),
+                    (Route<dynamic> route) => false,
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 

@@ -4,12 +4,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/user.dart';
 
+/*
+* User context model
+*/
 class UserContext {
   bool get loggedIn => user != null && token.isNotEmpty;
   User? user;
   String token = '';
 }
 
+/*
+* User and authentication state 
+*/
 class UserContextNotifier extends StateNotifier<UserContext> {
   UserContextNotifier({User? defaultUser})
       : super(UserContext()..user = defaultUser);
@@ -54,6 +60,9 @@ class UserContextNotifier extends StateNotifier<UserContext> {
   }
 }
 
+/*
+* Provider for accessing the user/authentication context
+*/
 final authProvider = StateNotifierProvider<UserContextNotifier, UserContext>(
   (ref) => UserContextNotifier(),
 );

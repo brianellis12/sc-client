@@ -68,6 +68,9 @@ GoogleSignIn _configureGoogleSignIn(ConfigSettings config) {
   );
 }
 
+/*
+* Provider for accessing the Authentication Service
+*/
 final authServiceProvider = Provider((ref) {
   final api = ref.watch(apiClientProvider);
   final config = ref.watch(configSettingsProvider);

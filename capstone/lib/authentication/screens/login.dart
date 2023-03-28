@@ -8,6 +8,9 @@ import 'package:capstone/authentication/models/authenticate_response.dart';
 import 'package:capstone/authentication/services/authentication_service.dart';
 import 'package:capstone/authentication/state/auth_provider.dart';
 
+/*
+* Login Screen
+*/
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -78,27 +81,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         loading = false;
       });
     }
-  }
-
-  Widget branding() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(width: 10),
-            Text(
-              'DataMaps',
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge!
-                  .copyWith(color: Colors.white),
-            )
-          ],
-        ),
-      ],
-    );
   }
 
   Widget loginButton(bool enabled) {
@@ -179,27 +161,37 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final loginEnabled = !loading && !(retryWithName && nameMissing);
 
     return Scaffold(
-      body: Container(
-        // decoration: const BoxDecoration(
-        //   image: DecorationImage(
-        //       image: AssetImage('assets/googleimage.png'), fit: BoxFit.cover),
-        // ),
-        child: Flex(
-          direction: Axis.vertical,
-          children: [
-            Flexible(
-              flex: 1,
-              child: branding(),
-            ),
-            const Spacer(),
-            Column(children: [
-              if (retryWithName) nameFields(),
-              loginButton(loginEnabled),
-            ]),
-            const Spacer(flex: 1)
-          ],
-        ),
+        body: Container(
+      width: double.infinity,
+      height: double.infinity,
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+            image: AssetImage('assets/earth.jpg'), fit: BoxFit.cover),
       ),
-    );
+      child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Text('Data Maps',
+                style: TextStyle(
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white)),
+            const SizedBox(height: 20),
+            if (retryWithName) nameFields(),
+            loginButton(loginEnabled),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              child: const Text('Or Continue Without Logging In'),
+              onPressed: () {
+                // Navigate to second route when tapped.
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const MapScreen()),
+                );
+              },
+            )
+          ]),
+    ));
   }
 }
