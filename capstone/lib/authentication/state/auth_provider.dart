@@ -11,6 +11,7 @@ class UserContext {
   bool get loggedIn => user != null && token.isNotEmpty;
   User? user;
   String token = '';
+  String googleToken = '';
 }
 
 /*
@@ -44,13 +45,15 @@ class UserContextNotifier extends StateNotifier<UserContext> {
     }
   }
 
-  Future logIn(User user, String token) async {
+  Future logIn(User user, String token, String googleToken) async {
     state = UserContext()
       ..token = token
+      ..googleToken = googleToken
       ..user = user;
 
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('token', token);
+    await prefs.setString('accessToken', googleToken);
     await prefs.setString('user', convert.json.encode(user.toJson()));
   }
 

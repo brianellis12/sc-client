@@ -48,21 +48,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     try {
       AuthenticateResponse auth;
-
       if (!retryWithName) {
         auth = await authService.login();
       } else {
         auth = await authService.login(
             firstNameController.text, lastNameController.text);
       }
-
+      print(auth.accessToken);
       if (auth.incompleteToken) {
         retryWithName = true;
         return;
       }
       retryWithName = false;
 
-      authContext.logIn(auth.user!, auth.accessToken!);
+      authContext.logIn(auth.user!, auth.accessToken!, auth.googleToken);
       if (!mounted) {
         return;
       }

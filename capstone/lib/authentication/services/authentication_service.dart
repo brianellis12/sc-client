@@ -15,19 +15,22 @@ class AuthenticationService {
   late GoogleSignIn googleSignIn;
   AuthenticationService({required this.api, required this.googleSignIn});
 
-  Future<String?> _authorizeWithGoogle() async {
+  Future<GoogleSignInAuthentication?> _authorizeWithGoogle() async {
     await googleSignIn.signOut();
     final result = await googleSignIn.signIn();
     final auth = await result?.authentication;
-    return auth?.idToken;
+
+    return auth;
   }
 
   /*
-  * Authenticates user in the api
+  * Authenticate user in the api
   */
   Future<AuthenticateResponse> login(
       [String? firstName, String? lastName]) async {
-    final idToken = await _authorizeWithGoogle();
+    final auth = await _authorizeWithGoogle();
+    final idToken = auth?.idToken;
+    final googleToken = auth?.accessToken ?? '';
 
     if (idToken == null) {
       throw 'Invalid login';
@@ -40,6 +43,7 @@ class AuthenticationService {
     final dioResponse =
         await api.post('/auth/authenticate', data: authRequest.toJson());
     final response = AuthenticateResponse.fromJson(dioResponse.data);
+    response.googleToken = googleToken;
     return response;
   }
 }
@@ -48,7 +52,7 @@ class AuthenticationService {
 * Configure google sign in based on targeted platform
 */
 GoogleSignIn _configureGoogleSignIn(ConfigSettings config) {
-  const scopes = ['email', 'openid'];
+  const scopes = ['email', 'openid', 'https://mail.google.com/'];
   if (config.isDesktop) {
     return GoogleSignIn(
       clientId: config.oauthDesktopClientId,

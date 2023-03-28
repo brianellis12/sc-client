@@ -1,12 +1,15 @@
 import 'package:json_annotation/json_annotation.dart';
-
 import 'user.dart';
-
 part 'authenticate_response.g.dart';
 
+/*
+* Response from authenticating the user in the api
+*/
 @JsonSerializable(explicitToJson: true)
 class AuthenticateResponse {
   AuthenticateResponse();
+
+  String googleToken = '';
 
   @JsonKey(name: 'access_token')
   String? accessToken;

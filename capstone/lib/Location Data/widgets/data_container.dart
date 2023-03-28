@@ -1,9 +1,14 @@
+import 'dart:io';
+
 import 'package:capstone/Location%20Data/models/census_data.dart';
 import 'package:capstone/Location%20Data/models/geographic_types.dart';
 import 'package:capstone/Location%20Data/models/location_data.dart';
 import 'package:capstone/Location%20Data/models/sections.dart';
 import 'package:flutter/material.dart';
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../authentication/state/auth_provider.dart';
 import '../services/data_service.dart';
 
 /*
@@ -69,6 +74,12 @@ class _DataContainerState extends ConsumerState<DataContainer> {
             }
             return ListTile(
               title: Text(item.headerValue),
+              trailing: ElevatedButton(
+                child: const Text('Save'),
+                onPressed: () {
+                  mail();
+                },
+              ),
             );
           },
           body: Column(children: [
@@ -79,5 +90,37 @@ class _DataContainerState extends ConsumerState<DataContainer> {
         );
       }).toList(),
     );
+  }
+
+  mail() async {
+    String email = ref.watch(authProvider).user?.email ?? 'ellisbxn@gmail.com';
+    String token = ref.watch(authProvider).googleToken;
+
+    final smtpServer = gmailSaslXoauth2(email, token);
+
+    final message = Message()
+      ..from = Address(email, 'Your name')
+      ..recipients.add('ellisbxn@gmail.com')
+      ..subject = 'Test Dart Mailer library :: 😀 :: ${DateTime.now()}'
+      ..text = 'This is the plain text.\nThis is line 2 of the text part.'
+      ..html = "<h1>Test</h1>\n<p>Hey! Here's some HTML content</p>"
+      ..attachments = [
+        FileAttachment(File('exploits_of_a_mom.png'))
+          ..location = Location.inline
+          ..cid = '<myimg@3.141>'
+      ];
+
+    try {
+      final sendReport = await send(message, smtpServer);
+      print('Message sent: ' + sendReport.toString());
+    } on MailerException catch (e) {
+      print('Message not sent.');
+      for (var p in e.problems) {
+        print('Problem: ${p.code}: ${p.msg}');
+      }
+    }
+    var connection = PersistentConnection(smtpServer);
+    await connection.send(message);
+    await connection.close();
   }
 }
