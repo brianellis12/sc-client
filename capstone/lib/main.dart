@@ -1,17 +1,17 @@
 import 'package:capstone/authentication/screens/login.dart';
+import 'package:flutter/foundation.dart' show kIsWeb, defaultTargetPlatform;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'Location Data/screens/map_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:google_sign_in_dartio/google_sign_in_dartio.dart';
 
+import 'authentication/state/auth_provider.dart';
+import 'configuration/state/config_settings.dart';
 import 'firebase_options.dart';
 
 /*
-* Run the application
+* Google sign in registration for web and desktop
 */
-import 'firebase_options.dart';
-
 Future _registerDesktopPlugin(ConfigSettings config) async {
   if (!config.isDesktop) {
     return;
@@ -22,6 +22,9 @@ Future _registerDesktopPlugin(ConfigSettings config) async {
   );
 }
 
+/*
+*  Main function registers login packages and starts application
+*/
 void main({List<Override>? testOverrides}) async {
   WidgetsFlutterBinding.ensureInitialized();
   final useFirebase =
@@ -31,16 +34,15 @@ void main({List<Override>? testOverrides}) async {
   }
 
   final container = ProviderContainer(overrides: testOverrides ?? []);
-  // eager load some proivders
   final userContext = container.read(authProvider.notifier);
   final config = container.read(configSettingsProvider);
 
+  // Initialize configurations
   await Future.wait([
     userContext.initialize(),
     config.initialize(),
   ]);
 
-  // now that config has been initialized...
   await _registerDesktopPlugin(config);
 
   runApp(
@@ -50,12 +52,16 @@ void main({List<Override>? testOverrides}) async {
     ),
   );
 }
+
+/*
+* Initial application creation
+*/
 class DataMapsApp extends ConsumerWidget {
   const DataMapsApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    //Run the Map Screen as the default homepage
+    //Run the Login Screen as the default homepage
     return const MaterialApp(title: 'Data Maps', home: LoginScreen());
   }
 }

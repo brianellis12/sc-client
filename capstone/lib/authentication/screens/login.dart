@@ -89,25 +89,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           children: [
             const SizedBox(width: 10),
             Text(
-              'Heart-Tree-Star',
+              'DataMaps',
               style: Theme.of(context)
                   .textTheme
                   .titleLarge!
                   .copyWith(color: Colors.white),
             )
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'By Fresh',
-              style: Theme.of(context)
-                  .textTheme
-                  .bodySmall!
-                  .copyWith(color: Colors.white),
-            ),
-            const FaIcon(FontAwesomeIcons.leaf, color: Colors.white)
           ],
         ),
       ],

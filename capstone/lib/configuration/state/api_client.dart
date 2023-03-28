@@ -9,7 +9,8 @@ final apiClientProvider = Provider((ref) {
 
   final dio = Dio();
   dio.options.baseUrl = config.apiEndpoint;
-  dio.options.sendTimeout = 12000 as Duration?; // 12 second timeout
+  dio.options.sendTimeout =
+      const Duration(milliseconds: 1200); // 12 second timeout
   if (userContext.token.isNotEmpty) {
     dio.options.headers['Authorization'] = 'Bearer ${userContext.token}';
   }

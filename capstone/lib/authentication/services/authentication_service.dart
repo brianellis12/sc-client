@@ -7,6 +7,9 @@ import 'package:capstone/configuration/state/api_client.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:capstone/configuration/state/config_settings.dart';
 
+/*
+* Handles user login based on targeted platform
+*/
 class AuthenticationService {
   late Dio api;
   late GoogleSignIn googleSignIn;
@@ -19,6 +22,9 @@ class AuthenticationService {
     return auth?.idToken;
   }
 
+  /*
+  * Authenticates user in the api
+  */
   Future<AuthenticateResponse> login(
       [String? firstName, String? lastName]) async {
     final idToken = await _authorizeWithGoogle();
@@ -38,6 +44,9 @@ class AuthenticationService {
   }
 }
 
+/*
+* Configure google sign in based on targeted platform
+*/
 GoogleSignIn _configureGoogleSignIn(ConfigSettings config) {
   const scopes = ['email', 'openid'];
   if (config.isDesktop) {
@@ -54,8 +63,6 @@ GoogleSignIn _configureGoogleSignIn(ConfigSettings config) {
     );
   }
 
-  // client id is detemined by package name + sha thumbprint for android
-  // or plist value for iOS, so is not needed here.
   return GoogleSignIn(
     scopes: ['email', 'openid'],
   );

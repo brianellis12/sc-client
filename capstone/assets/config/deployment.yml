@@ -1,0 +1,6 @@
+api_endpoint: http://localhost:8000
+environment: "Local"
+oauth:
+  client_id:
+    desktop: 463580030293-tv7sogi4otjat6i4unajknll8l691jm2.apps.googleusercontent.com
+    web: 463580030293-qirpjc8mi97oujhv5d0ef5vjfe1jgqbb.apps.googleusercontent.com
