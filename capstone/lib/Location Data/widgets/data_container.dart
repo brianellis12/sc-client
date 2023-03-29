@@ -26,6 +26,9 @@ class _DataContainerState extends ConsumerState<DataContainer> {
   late List<String> headers;
   late List<String> values;
   late List<LocationData> _data;
+  late String? stateCode;
+  late String? county;
+  late String? tract;
 
   //Builds the widgets
   @override
@@ -48,9 +51,9 @@ class _DataContainerState extends ConsumerState<DataContainer> {
 
   // Get the census data for the current section and the user's location
   void getCensusData(String section) async {
-    final stateCode = ref.watch(geographicTypesProvider).stateCode;
-    final county = ref.watch(geographicTypesProvider).county;
-    final tract = ref.watch(geographicTypesProvider).tract;
+    stateCode = ref.watch(geographicTypesProvider).stateCode;
+    county = ref.watch(geographicTypesProvider).county;
+    tract = ref.watch(geographicTypesProvider).tract;
 
     final locationDataService = ref.watch(locationDataServiceProvider);
     final CensusData censusData = await locationDataService.getCensusData(
@@ -78,7 +81,7 @@ class _DataContainerState extends ConsumerState<DataContainer> {
               trailing: ElevatedButton(
                 child: const Text('Save'),
                 onPressed: () {
-                  mail(values);
+                  mail(values, '$county, $stateCode', item.headerValue);
                 },
               ),
             );
@@ -93,7 +96,7 @@ class _DataContainerState extends ConsumerState<DataContainer> {
     );
   }
 
-  mail(List<String> data) async {
+  mail(List<String> data, String location, String header) async {
     String email = ref.watch(authProvider).user?.email ?? 'ellisbxn@gmail.com';
     String token = ref.watch(authProvider).googleToken;
 
@@ -106,9 +109,9 @@ class _DataContainerState extends ConsumerState<DataContainer> {
     final message = Message()
       ..from = Address(email, 'Your name')
       ..recipients.add(email)
-      ..subject = 'Data Maps Save :: ${DateTime.now()}'
+      ..subject = 'Data Maps Information'
       ..html =
-          '<h1>Data Maps Save File</h1>\n<p>Thanks for using Data Maps! Your information is attached</p>'
+          '<h1>Data Maps Save File</h1>\n<p>Thanks for using Data Maps! Your information for $header from $location is attached</p>'
       ..attachments = [
         FileAttachment(File('${directory.path}/data.txt'))
           ..location = Location.inline
@@ -116,8 +119,7 @@ class _DataContainerState extends ConsumerState<DataContainer> {
       ];
 
     try {
-      final sendReport = await send(message, smtpServer);
-      print('Message sent: ' + sendReport.toString());
+      await send(message, smtpServer);
     } on MailerException catch (e) {
       print('Message not sent.');
       for (var p in e.problems) {

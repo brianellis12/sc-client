@@ -84,7 +84,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   Widget loginButton(bool enabled) {
     return ElevatedButton(
-      key: const Key('login-authenticate-fab'),
+      key: const Key('login-button'),
       onPressed: enabled ? authenticate : null,
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.resolveWith((states) {
