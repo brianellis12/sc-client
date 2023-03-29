@@ -3,6 +3,9 @@ import 'package:capstone/authentication/state/auth_provider.dart';
 import 'package:capstone/configuration/state/config_settings.dart';
 import 'package:dio/dio.dart';
 
+/*
+* Provides the state for the api for standardization of endpoint querying
+*/
 final apiClientProvider = Provider((ref) {
   final config = ref.watch(configSettingsProvider);
   final userContext = ref.watch(authProvider);

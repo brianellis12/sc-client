@@ -10,6 +10,7 @@ import 'package:mailer/smtp_server.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../authentication/state/auth_provider.dart';
 import '../services/data_service.dart';
+import 'package:path_provider/path_provider.dart';
 
 /*
 * Expansion Panel to store the data for each section of a census data group
@@ -77,7 +78,7 @@ class _DataContainerState extends ConsumerState<DataContainer> {
               trailing: ElevatedButton(
                 child: const Text('Save'),
                 onPressed: () {
-                  mail();
+                  mail(values);
                 },
               ),
             );
@@ -92,20 +93,24 @@ class _DataContainerState extends ConsumerState<DataContainer> {
     );
   }
 
-  mail() async {
+  mail(List<String> data) async {
     String email = ref.watch(authProvider).user?.email ?? 'ellisbxn@gmail.com';
     String token = ref.watch(authProvider).googleToken;
 
     final smtpServer = gmailSaslXoauth2(email, token);
 
+    final directory = await getApplicationDocumentsDirectory();
+    final file = File('${directory.path}/data.txt');
+    await file.writeAsString(data.join('\n'));
+
     final message = Message()
       ..from = Address(email, 'Your name')
-      ..recipients.add('ellisbxn@gmail.com')
-      ..subject = 'Test Dart Mailer library :: 😀 :: ${DateTime.now()}'
-      ..text = 'This is the plain text.\nThis is line 2 of the text part.'
-      ..html = "<h1>Test</h1>\n<p>Hey! Here's some HTML content</p>"
+      ..recipients.add(email)
+      ..subject = 'Data Maps Save :: ${DateTime.now()}'
+      ..html =
+          '<h1>Data Maps Save File</h1>\n<p>Thanks for using Data Maps! Your information is attached</p>'
       ..attachments = [
-        FileAttachment(File('exploits_of_a_mom.png'))
+        FileAttachment(File('${directory.path}/data.txt'))
           ..location = Location.inline
           ..cid = '<myimg@3.141>'
       ];
@@ -119,8 +124,5 @@ class _DataContainerState extends ConsumerState<DataContainer> {
         print('Problem: ${p.code}: ${p.msg}');
       }
     }
-    var connection = PersistentConnection(smtpServer);
-    await connection.send(message);
-    await connection.close();
   }
 }

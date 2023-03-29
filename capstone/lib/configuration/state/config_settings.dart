@@ -3,6 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yaml/yaml.dart';
 import 'platform_js.dart' if (dart.library.io) 'platform_io.dart' as plat;
 
+/*
+* Handles platform setup
+*/
 class ConfigSettings {
   late YamlMap _yml;
 

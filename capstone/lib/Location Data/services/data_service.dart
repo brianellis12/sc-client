@@ -1,6 +1,8 @@
 import 'package:capstone/Location%20Data/models/census_data.dart';
 import 'package:capstone/Location%20Data/models/geographic_types.dart';
 import 'package:capstone/Location%20Data/models/sections.dart';
+import 'package:capstone/authentication/state/auth_provider.dart';
+import 'package:capstone/configuration/state/api_client.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/location_data.dart';
@@ -10,9 +12,9 @@ import 'package:dio/dio.dart';
 * Location Data Service
 * Sends and Receives data from the Rest API
 */
-class associated {
-  final dio = Dio();
-
+class DataService {
+  final Dio api;
+  DataService(this.api);
   /*
   * Get the geographic data from the inputted coordinates
   */
@@ -22,7 +24,7 @@ class associated {
     final queryParams =
         params.entries.map((e) => '${e.key}=${e.value}').join('&');
 
-    final response = await dio.get('http://localhost:8000/geoid?$queryParams');
+    final response = await api.get('/geoid?$queryParams');
     print(response.data);
     final result = GeographicTypes.fromJson(response.data);
     return result;
@@ -38,8 +40,7 @@ class associated {
     final queryParams =
         params.entries.map((e) => '${e.key}=${e.value}').join('&');
 
-    final response =
-        await dio.get('http://localhost:8000/location/sections?$queryParams');
+    final response = await api.get('/location/sections?$queryParams');
 
     return Sections()..currentSections = List<String>.from(response.data);
   }
@@ -59,8 +60,7 @@ class associated {
     final queryParams =
         params.entries.map((e) => '${e.key}=${e.value}').join('&');
 
-    final response =
-        await dio.get('http://localhost:8000/location/data?$queryParams');
+    final response = await api.get('/location/data?$queryParams');
 
     return CensusData()..currentCensusData = List<String>.from(response.data);
   }
@@ -70,5 +70,6 @@ class associated {
 * Provider for accessing the Location Data Service
 */
 final locationDataServiceProvider = Provider((ref) {
-  return associated();
+  final api = ref.watch(apiClientProvider);
+  return DataService(api);
 });
