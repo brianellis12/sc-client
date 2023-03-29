@@ -27,6 +27,9 @@ class UserContextNotifier extends StateNotifier<UserContext> {
     await Future.wait([prefs.remove('token'), prefs.remove('user')]);
   }
 
+  /*
+  * Initializes user for IOS and android platforms
+  */
   Future initialize() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
@@ -45,6 +48,9 @@ class UserContextNotifier extends StateNotifier<UserContext> {
     }
   }
 
+  /*
+  * Sets user state
+  */
   Future logIn(User user, String token, String googleToken) async {
     state = UserContext()
       ..token = token
@@ -57,6 +63,9 @@ class UserContextNotifier extends StateNotifier<UserContext> {
     await prefs.setString('user', convert.json.encode(user.toJson()));
   }
 
+  /*
+  * Removes current user state
+  */
   Future logOut() async {
     state = UserContext();
     await _clearPrefs();

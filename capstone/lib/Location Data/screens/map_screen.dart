@@ -69,7 +69,9 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     );
   }
 
-  // Navbar with Account Dropdown
+  /*
+  * Navbar with Account Dropdown
+  */
   Widget navbar() {
     User? user = ref.watch(authProvider).user;
     return AppBar(

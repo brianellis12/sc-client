@@ -2,6 +2,10 @@ import 'package:capstone/authentication/screens/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+/*
+* Widget test for Login Screen
+* Assoc: authentication/login.dart
+*/
 void main() {
   testWidgets('Map Screen Test', (WidgetTester tester) async {
     // Build our app and trigger a frame.

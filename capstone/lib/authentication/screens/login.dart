@@ -38,6 +38,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       });
   }
 
+  /*
+  * Authenticate the user's google account
+  */
   void authenticate() async {
     setState(() {
       loading = true;
@@ -54,7 +57,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         auth = await authService.login(
             firstNameController.text, lastNameController.text);
       }
-      print(auth.accessToken);
       if (auth.incompleteToken) {
         retryWithName = true;
         return;
@@ -82,6 +84,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     }
   }
 
+  /*
+  * Button allowing the user to login
+  */
   Widget loginButton(bool enabled) {
     return ElevatedButton(
       key: const Key('login-button'),
@@ -107,6 +112,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     );
   }
 
+  /*
+  * Input text fields brought up when a user doesn't have a first and last name associated with their google account
+  */
   Widget nameFields() {
     return SizedBox(
       width: 225,
@@ -143,6 +151,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     );
   }
 
+  /*
+  * Styling for name inputs
+  */
   InputDecoration textDecoration(String text) {
     return InputDecoration(
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
@@ -153,6 +164,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     );
   }
 
+  /*
+  * Build method for the login screen
+  */
   @override
   Widget build(BuildContext context) {
     final nameMissing =
