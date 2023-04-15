@@ -70,28 +70,38 @@ class _DataContainerState extends ConsumerState<DataContainer> {
       initialOpenPanelValue: 2,
       children: _data.map<ExpansionPanelRadio>((LocationData item) {
         return ExpansionPanelRadio(
-          value: item.id,
-          headerBuilder: (BuildContext context, bool isExpanded) {
-            // If a expansion panel is opened, populate with the associated data
-            if (isExpanded == true) {
-              getCensusData(item.headerValue);
-            }
-            return ListTile(
-              title: Text(item.headerValue),
-              trailing: ElevatedButton(
-                child: const Text('Save'),
-                onPressed: () {
-                  mail(values, '$county, $stateCode', item.headerValue);
-                },
-              ),
-            );
-          },
-          body: Column(children: [
-            ...values.map((item) => ListTile(
-                  title: Text(item),
-                ))
-          ]),
-        );
+            value: item.id,
+            headerBuilder: (BuildContext context, bool isExpanded) {
+              // If a expansion panel is opened, populate with the associated data
+              if (isExpanded == true) {
+                getCensusData(item.headerValue);
+              }
+              return SizedBox(
+                  width: 1200,
+                  child: ListTile(
+                    title: Text(item.headerValue),
+                    trailing: ElevatedButton(
+                      child: const Text('Save'),
+                      onPressed: () {
+                        mail(values, '$county, $stateCode', item.headerValue);
+                      },
+                    ),
+                  ));
+            },
+            body: SizedBox(
+              width: 1200,
+              child: Column(children: [
+                ...values.map((item) => ListTile(
+                      title: Text(item),
+                      minVerticalPadding: 2.0,
+                      shape: const RoundedRectangleBorder(
+                        side: BorderSide(
+                          color: Colors.black,
+                        ),
+                      ),
+                    ))
+              ]),
+            ));
       }).toList(),
     );
   }

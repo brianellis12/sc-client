@@ -25,7 +25,7 @@ class DataService {
         params.entries.map((e) => '${e.key}=${e.value}').join('&');
 
     final response = await api.get('/geoid?$queryParams');
-    print(response.data);
+
     final result = GeographicTypes.fromJson(response.data);
     return result;
   }
@@ -35,7 +35,6 @@ class DataService {
   */
   Future<Sections> getSections(String group) async {
     final params = {'group': group.toString()};
-    print(group);
 
     final queryParams =
         params.entries.map((e) => '${e.key}=${e.value}').join('&');

@@ -10,6 +10,7 @@ import 'package:capstone/Location Data/services/data_service.dart';
 
 import '../../authentication/models/user.dart';
 import '../../authentication/screens/login.dart';
+import '../widgets/zoombuttons_plugin_option.dart';
 
 /*
 * Map Screen
@@ -26,6 +27,7 @@ class MapScreen extends ConsumerStatefulWidget {
 
 class _MapScreenState extends ConsumerState<MapScreen> {
   LatLng marker = LatLng(10, 10);
+  late GeographicTypes types;
 
   @override
   Widget build(BuildContext context) {
@@ -37,22 +39,33 @@ class _MapScreenState extends ConsumerState<MapScreen> {
             const Icon(IconData(0xf193, fontFamily: 'MaterialIcons')));
 
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: navbar(),
       body: ListView(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(0.1),
         children: [
-          navbar(),
           SizedBox(
             // Map View
-            height: 600,
+            height: 700,
             child: FlutterMap(
               options: MapOptions(
                   center: LatLng(44.967243, -103.771556),
                   zoom: 5,
                   onTap: _handleTap,
                   enableScrollWheel: false),
+              nonRotatedChildren: const [
+                FlutterMapZoomButtons(
+                  minZoom: 4,
+                  maxZoom: 19,
+                  mini: true,
+                  padding: 10,
+                  alignment: Alignment.bottomRight,
+                ),
+              ],
               children: [
                 TileLayer(
-                  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                  urlTemplate:
+                      'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
                   userAgentPackageName: 'dev.fleaflet.flutter_map.example',
                 ),
                 MarkerLayer(
@@ -61,6 +74,23 @@ class _MapScreenState extends ConsumerState<MapScreen> {
               ],
             ),
           ),
+          Container(
+              margin: const EdgeInsets.all(15.0),
+              padding: const EdgeInsets.all(3.0),
+              decoration:
+                  BoxDecoration(border: Border.all(color: Colors.black)),
+              child: Row(
+                children: [
+                  Text(types.stateCode ?? "",
+                      style:
+                          const TextStyle(fontSize: 50, color: Colors.black)),
+                  Text(types.county ?? "",
+                      style:
+                          const TextStyle(fontSize: 50, color: Colors.black)),
+                  Text(types.tract ?? "",
+                      style: const TextStyle(fontSize: 50, color: Colors.black))
+                ],
+              )),
           const SizedBox(
               height: 40000,
               child: GroupBar()) //Imported group bar containing data containers
@@ -72,13 +102,17 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   /*
   * Navbar with Account Dropdown
   */
-  Widget navbar() {
+  PreferredSizeWidget navbar() {
     User? user = ref.watch(authProvider).user;
     return AppBar(
       title: const Text('Data Maps'),
+      //backgroundColor: Colors.transparent,
+      backgroundColor: Color(0x44000000),
+      elevation: 0,
+      automaticallyImplyLeading: false,
       actions: [
         PopupMenuButton(
-          icon: Icon(Icons.account_circle),
+          icon: const Icon(Icons.account_box),
           itemBuilder: (context) => [
             PopupMenuItem(child: Text('${user?.fullName}')),
             PopupMenuItem(child: Text('Email: ${user?.email}')),
@@ -109,7 +143,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
 
     final locationDataService = ref.watch(locationDataServiceProvider);
 
-    final GeographicTypes types =
+    types =
         await locationDataService.getGeoId(latlng.longitude, latlng.latitude);
     ref
         .read(geographicTypesProvider.notifier)
