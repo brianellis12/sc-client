@@ -12,11 +12,40 @@ import '../../authentication/state/auth_provider.dart';
 import '../services/data_service.dart';
 import 'package:path_provider/path_provider.dart';
 
+class GradientPainter extends CustomPainter {
+  GradientPainter({required this.gradient, required this.strokeWidth});
+
+  final Gradient gradient;
+  final double strokeWidth;
+  final Paint paintObject = Paint();
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    Rect innerRect = Rect.fromLTRB(strokeWidth, strokeWidth,
+        size.width - strokeWidth, size.height - strokeWidth);
+    Rect outerRect = Offset.zero & size;
+
+    paintObject.shader = gradient.createShader(outerRect);
+    Path borderPath = _calculateBorderPath(outerRect, innerRect);
+    canvas.drawPath(borderPath, paintObject);
+  }
+
+  Path _calculateBorderPath(Rect outerRect, Rect innerRect) {
+    Path outerRectPath = Path()..addRect(outerRect);
+    Path innerRectPath = Path()..addRect(innerRect);
+    return Path.combine(PathOperation.difference, outerRectPath, innerRectPath);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => true;
+}
+
 /*
 * Expansion Panel to store the data for each section of a census data group
 */
 class DataContainer extends ConsumerStatefulWidget {
-  const DataContainer({super.key});
+  final String listPart;
+  const DataContainer(this.listPart, {Key? key}) : super(key: key);
 
   @override
   ConsumerState createState() => _DataContainerState();
@@ -34,19 +63,42 @@ class _DataContainerState extends ConsumerState<DataContainer> {
   @override
   Widget build(BuildContext context) {
     //Gets the current state of the data and reloads the widget whenever a change occurs
-    headers = ref.watch(sectionsProvider).currentSections ?? [];
+    List<String> allList = ref.watch(sectionsProvider).currentSections;
+    var half = (allList.length / 2).round();
+
+    switch (widget.listPart) {
+      case "all":
+        headers = allList;
+        break;
+      case "first":
+        headers = allList.sublist(0, half);
+        break;
+      case "second":
+        headers = allList.sublist(half);
+        break;
+      default:
+    }
     values = ref.watch(censusDataProvider).currentCensusData ?? [];
+    try {
+      _data = headers.map((header) {
+        return LocationData(
+            headerValue: header, values: values, id: headers.indexOf(header));
+      }).toList();
 
-    _data = headers.map((header) {
-      return LocationData(
-          headerValue: header, values: values, id: headers.indexOf(header));
-    }).toList();
-
-    return SingleChildScrollView(
-      child: Container(
-        child: _buildPanel(),
-      ),
-    );
+      return SingleChildScrollView(
+        child: Container(
+          child: _buildPanel(),
+        ),
+      );
+    } catch (err) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Data Fields failed to load $err'),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
+    }
+    return Container();
   }
 
   // Get the census data for the current section and the user's location
@@ -67,7 +119,7 @@ class _DataContainerState extends ConsumerState<DataContainer> {
   //List of expansion Panels, one panel for each section in the census data group
   Widget _buildPanel() {
     return ExpansionPanelList.radio(
-      initialOpenPanelValue: 2,
+      dividerColor: Colors.black,
       children: _data.map<ExpansionPanelRadio>((LocationData item) {
         return ExpansionPanelRadio(
             value: item.id,
@@ -83,7 +135,44 @@ class _DataContainerState extends ConsumerState<DataContainer> {
                     trailing: ElevatedButton(
                       child: const Text('Save'),
                       onPressed: () {
-                        mail(values, '$county, $stateCode', item.headerValue);
+                        try {
+                          showModalBottomSheet<void>(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return SizedBox(
+                                height: 200,
+                                child: Center(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      ElevatedButton(
+                                        onPressed: () => mail(
+                                            values,
+                                            '$county, $stateCode',
+                                            item.headerValue),
+                                        child: const Text('Send to Email'),
+                                      ),
+                                      const SizedBox(width: 100),
+                                      ElevatedButton(
+                                        onPressed: () => writeFile(values),
+                                        child: const Text('Save as File'),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        } catch (err) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content:
+                                  Text('Save selection failed to load $err'),
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.error,
+                            ),
+                          );
+                        }
                       },
                     ),
                   ));
@@ -104,6 +193,24 @@ class _DataContainerState extends ConsumerState<DataContainer> {
             ));
       }).toList(),
     );
+  }
+
+  Future<String> get _localPath async {
+    final directory = await getApplicationDocumentsDirectory();
+
+    return directory.path;
+  }
+
+  Future<File> get _localFile async {
+    final path = await _localPath;
+    return File('$path/data_maps_save.txt');
+  }
+
+  writeFile(List<String> data) async {
+    final file = await _localFile;
+
+    // Write the file
+    return file.writeAsString(data.join('\n'));
   }
 
   mail(List<String> data, String location, String header) async {
@@ -130,11 +237,13 @@ class _DataContainerState extends ConsumerState<DataContainer> {
 
     try {
       await send(message, smtpServer);
-    } on MailerException catch (e) {
-      print('Message not sent.');
-      for (var p in e.problems) {
-        print('Problem: ${p.code}: ${p.msg}');
-      }
+    } catch (err) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to send email $err'),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
     }
   }
 }

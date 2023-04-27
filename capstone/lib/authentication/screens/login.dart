@@ -198,10 +198,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               child: const Text('Or Continue Without Logging In'),
               onPressed: () {
                 // Navigate to second route when tapped.
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const MapScreen()),
-                );
+                try {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const MapScreen()),
+                  );
+                } catch (err) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Unable to Load Main Screen $err'),
+                      backgroundColor: Theme.of(context).colorScheme.error,
+                    ),
+                  );
+                }
               },
             )
           ]),

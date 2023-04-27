@@ -193,6 +193,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.0"
+  dartis:
+    dependency: "direct main"
+    description:
+      name: dartis
+      sha256: "1e2835d203495ba6a4f674a5629aa0f85136f600867b164fc25306a8f9a86b67"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.5.0"
   dartx:
     dependency: "direct dev"
     description:
@@ -289,30 +297,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.2"
-  firebase_messaging:
-    dependency: "direct main"
-    description:
-      name: firebase_messaging
-      sha256: e82c99bcccf707db4d82ac3fb07be629a392c4cc2a6756aaf1a74c009114846f
-      url: "https://pub.dev"
-    source: hosted
-    version: "14.3.0"
-  firebase_messaging_platform_interface:
-    dependency: transitive
-    description:
-      name: firebase_messaging_platform_interface
-      sha256: "710bb139ff6e27fe47a0684ba88df4b7517a44d814dc6b7f54a2537568a82fcf"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.2.16"
-  firebase_messaging_web:
-    dependency: transitive
-    description:
-      name: firebase_messaging_web
-      sha256: "66ece031cb17fb771cda4b3328858395fa48aa4c3b3e6a5d1bcaff928086cacd"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.2.17"
   fixnum:
     dependency: transitive
     description:
@@ -578,7 +562,7 @@ packages:
     source: hosted
     version: "3.1.1"
   logging:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
       name: logging
       sha256: "04094f2eb032cbb06c6f6e8d3607edcfcb0455e2bb6cbc010cb01171dcb64e6d"
@@ -777,6 +761,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.2.1"
+  redis:
+    dependency: "direct main"
+    description:
+      name: redis
+      sha256: "32e28eb1ba2e0fe2af50bbd06e675e4dfdce4f0ba95c5bc885c72383a1b0b47e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.0"
   riverpod:
     dependency: transitive
     description:

@@ -7,13 +7,12 @@ part 'sections.g.dart';
 */
 @JsonSerializable()
 class Sections {
-  List<String>? currentSections;
+  List<String> currentSections;
 
-  Sections({this.currentSections});
+  Sections({required this.currentSections});
 
-  Sections copyWith({List<String>? currentSections}) {
-    return Sections()
-      ..currentSections = currentSections ?? this.currentSections;
+  Sections copyWith({required List<String> currentSections}) {
+    return Sections(currentSections: currentSections);
   }
 
   factory Sections.fromJson(Map<String, dynamic> data) =>
@@ -28,21 +27,21 @@ class Sections {
 class SectionsNotifier extends StateNotifier<Sections> {
   SectionsNotifier(Sections initialState) : super(initialState);
 
-  void specifyCurrentSections(List<String>? currentSections) {
+  void specifyCurrentSections(List<String> currentSections) {
     state = state.copyWith(currentSections: currentSections);
   }
 
   void clearCurrentSections() {
-    state = state.copyWith()..currentSections = null;
+    state = state.copyWith(currentSections: ["", " "]);
   }
 
   void reset() {
-    state = Sections();
+    state = Sections(currentSections: ["", " "]);
   }
 }
 
 final sectionsProvider =
     StateNotifierProvider<SectionsNotifier, Sections>((ref) {
-  final initialState = Sections();
+  final initialState = Sections(currentSections: ["", " "]);
   return SectionsNotifier(initialState);
 });

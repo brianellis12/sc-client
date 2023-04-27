@@ -7,8 +7,8 @@ part of 'sections.dart';
 // **************************************************************************
 
 Sections _$SectionsFromJson(Map<String, dynamic> json) => Sections(
-      currentSections: (json['currentSections'] as List<dynamic>?)
-          ?.map((e) => e as String)
+      currentSections: (json['currentSections'] as List<dynamic>?)!
+          .map((e) => e as String)
           .toList(),
     );
 

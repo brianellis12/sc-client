@@ -44,13 +44,14 @@ dependencies:
   google_sign_in_dartio: ^0.2.0
   firebase_auth: ^4.2.2
   beamer: ^1.5.3
-  firebase_messaging: ^14.3.0
   font_awesome_flutter: ^10.4.0
   shared_preferences: ^2.0.20
   mailer: ^6.0.0
   path_provider: ^2.0.14
   url_launcher: ^6.1.10
   info_popup: ^3.0.0
+  dartis: ^0.5.0
+  redis: ^3.1.0
   
 dev_dependencies:
   flutter_test:
@@ -74,7 +75,8 @@ dev_dependencies:
   json_serializable:
   dartx: ^1.0.0
 
-
+dependency_overrides:
+  logging: ^1.0.0
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
